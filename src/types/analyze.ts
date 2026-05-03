@@ -8,10 +8,17 @@ export type AnalyzeRequest = {
   text?: string
 }
 
+export type Issue = {
+  text: string;
+  severity: Severity;
+}
+
 export type AnalyzeResponse = {
-  issues: string[]
+  issues: Issue[]
   recommendations: string[]
   focus_area: string
 }
 
 export type Mode = "stats" | "text";
+
+export type Severity = "high" | "medium" | "low";

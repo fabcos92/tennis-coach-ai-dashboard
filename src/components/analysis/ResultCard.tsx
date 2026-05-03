@@ -1,24 +1,14 @@
-import { getSeverity } from "../../functions/getSeverity";
 import { sortIssues } from "../../functions/sortIssues";
+import type { AnalyzeResponse, Severity } from "../../types/analyze";
 
 type Props = {
-  result: {
-    focus_area: string;
-    issues: string[];
-    recommendations: string[];
-  };
+  result: AnalyzeResponse;
 };
 
-const severityStyles = {
-  3: "bg-red-50 text-red-700 border-red-200",
-  2: "bg-yellow-50 text-yellow-700 border-yellow-200",
-  1: "bg-green-50 text-green-700 border-green-200",
-};
-
-const severityLabel = {
-  3: "high",
-  2: "medium",
-  1: "low",
+const badgeStyleBySeverity: Record<Severity, string> = {
+  high: "bg-red-50 text-red-700 border-red-200",
+  medium: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  low: "bg-green-50 text-green-700 border-green-200",
 };
 
 export const ResultCard = ({ result }: Props) => {
@@ -28,49 +18,42 @@ export const ResultCard = ({ result }: Props) => {
   return (
     <div className="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
 
-      {/* HEADER */}
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-500">Primary focus</p>
-          <p className="text-lg font-semibold">{result.focus_area}</p>
-        </div>
-
-        <div className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full">
-          AI Insight
-        </div>
+      <div>
+        <p className="text-xs text-gray-500 uppercase tracking-wide">
+          Focus area
+        </p>
+        <h2 className="text-lg font-semibold text-gray-900">
+          {result.focus_area}
+        </h2>
       </div>
 
-      {/* 🔥 TOP ISSUE */}
       {topIssue && (
-        <div className="border border-red-200 bg-red-50 rounded-xl p-4">
-          <p className="text-sm font-medium text-red-700 mb-1">
-            Top priority issue
+        <div className="bg-gray-50 border rounded-xl p-4">
+          <p className="text-xs text-gray-500 mb-1">
+            Key insight
           </p>
-          <p className="text-base font-semibold text-red-800">
-            {topIssue}
+          <p className="text-sm font-medium text-gray-900">
+            {topIssue.text}
           </p>
         </div>
       )}
 
-      {/* ISSUES */}
       <div>
         <p className="text-sm font-medium text-gray-700 mb-2">
-          All Issues
+          Detected patterns
         </p>
 
         <div className="space-y-2">
           {sortedIssues.map((issue) => {
-            const severity = getSeverity(issue);
-
             return (
               <div
-                key={issue}
-                className={`border rounded-lg px-3 py-2 text-sm flex justify-between items-center ${severityStyles[severity]}`}
+                key={issue.text}
+                className={`flex justify-between items-center border rounded-lg px-3 py-2 text-sm ${badgeStyleBySeverity[issue.severity]}`}
               >
-                <span>{issue}</span>
+                <span>{issue.text}</span>
 
                 <span className="text-xs uppercase opacity-70">
-                  {severityLabel[severity]}
+                  {issue.severity}
                 </span>
               </div>
             );
@@ -78,17 +61,16 @@ export const ResultCard = ({ result }: Props) => {
         </div>
       </div>
 
-      {/* RECOMMENDATIONS */}
       <div>
         <p className="text-sm font-medium text-gray-700 mb-2">
           Recommendations
         </p>
 
-        <div className="space-y-2">
-          {result.recommendations?.map((rec) => (
+        <div className="grid gap-2">
+          {result.recommendations.map((rec) => (
             <div
               key={rec}
-              className="border rounded-lg px-3 py-2 text-sm bg-gray-50"
+              className="border rounded-lg p-3 text-sm bg-blue-50 text-blue-800"
             >
               {rec}
             </div>
