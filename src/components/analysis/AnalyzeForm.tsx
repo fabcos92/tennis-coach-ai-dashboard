@@ -49,7 +49,7 @@ export const AnalyzeForm = ({ onSubmit, isLoading }: Props) => {
         </div>
 
         <div>
-          <label className="text-sm text-gray-600">Second serve won %</label>
+          <label className="text-sm text-gray-600">Second serve %</label>
           <input
             type="number"
             className="w-full border rounded-lg p-2"
@@ -72,7 +72,7 @@ export const AnalyzeForm = ({ onSubmit, isLoading }: Props) => {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
       >
         {isLoading ? "Analyzing..." : "Analyze match"}
       </button>
