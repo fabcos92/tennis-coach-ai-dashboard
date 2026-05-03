@@ -13,3 +13,5 @@ export type AnalyzeResponse = {
   recommendations: string[]
   focus_area: string
 }
+
+export type Mode = "stats" | "text";

@@ -2,9 +2,14 @@ import { useAnalyze } from "../hooks/useAnalyze";
 import { AnalyzeForm } from "../components/analysis/AnalyzeForm";
 import { SkeletonLine } from "../components/ui/SkeletonLine";
 import { ResultCard } from "../components/analysis/ResultCard";
+import type { Mode } from "../types/analyze";
+import { ModeToggle } from "../components/analysis/ModeToggle";
+import { TextAnalyzeForm } from "../components/analysis/TextAnalyzeForm";
+import { useState } from "react";
 
 export const Dashboard = () => {
   const { result, mutate, isPending, error } = useAnalyze();
+  const [mode, setMode] = useState<Mode>("stats");
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center p-6">
@@ -18,7 +23,22 @@ export const Dashboard = () => {
         </div>
 
         <div className="bg-white border rounded-xl p-6 shadow-sm">
-          <AnalyzeForm onSubmit={mutate} loading={isPending} />
+          <div className="space-y-4">
+
+            <ModeToggle current={mode} onToggle={setMode} />
+
+            {mode === "stats" ? (
+              <AnalyzeForm
+                onSubmit={mutate}
+                isLoading={isPending}
+              />
+            ) : (
+              <TextAnalyzeForm
+                onSubmit={mutate}
+                isLoading={isPending}
+              />
+            )}
+          </div>
         </div>
 
         {!result && !isPending && !error && (
